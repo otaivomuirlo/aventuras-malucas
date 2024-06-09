@@ -88,7 +88,7 @@ table {
     table-layout: fixed;
     width: calc(30 * 40px); 
     height: calc(18 * 40px); 
-    border-collapse: collapse;
+    border-width: 5px;
 }
 
 td {

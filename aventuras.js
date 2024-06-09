@@ -1,3 +1,28 @@
+class Npc {
+    constructor(name, message, imageSrc) {
+        this.name = name;
+        this.message = message;
+        this.imageSrc = imageSrc;
+    }
+}
+
+function interagirComNpc() {
+    const npcProximo = npcsOnMap.find(npc => Math.abs(npc.x - playerX) <= 0.5 && Math.abs(npc.y - playerY) <= 0.5);
+    if (npcProximo) {
+        showAlert(npcProximo.message);
+    }
+}
+
+let npcsOnMap = [];
+
+function addNpcToMap(name, message, imageSrc, x, y) {
+    const npc = new Npc(name, message, imageSrc);
+    npcsOnMap.push({ npc, x, y });
+    updateTable();
+}
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
     const nextButton = document.getElementById("next-button");
     if (!nextButton) return;
@@ -7,6 +32,36 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     atualizarVisibilidadeMapa();
 });
+
+const transitionBlocks = [
+    { x: 17, y: 8, newMap: "mapa2" },
+    { x: 17, y: 9, newMap: "mapa2" },
+    { x: 17, y: 10, newMap: "mapa2" },
+];
+
+
+function loadMap(mapName) {
+    if (mapName === "mapa2") {
+
+        numRows = 20;  
+        numCols = 20;  
+        playerX = 1;
+        playerY = 1;
+
+        monstrosOnMap = [];
+        npcsOnMap = [];
+        itemsOnMap = [];
+
+
+        addNpcToMap("Guarda", "!!!tem um monstro muito forte a frente pegue a armadura e tenha cuidado!!!", "imgs/guarda.png", 2, 2);
+
+    }
+
+    updateTable();
+    atualizarVisibilidadeMapa();
+    atualizarVida();
+}
+
 
 function showNextParagraph() {
     const storyParagraphs = [
@@ -279,7 +334,16 @@ function updateTable() {
                 monstroImage.classList.add('Gif_Img');
                 cell.appendChild(monstroImage);
             }
-            row.appendChild(cell);   
+
+            const npcOnCell = npcsOnMap.find(npcObj => npcObj.x === i && npcObj.y === j);
+            if (npcOnCell) {
+                const npcImage = document.createElement('img');
+                npcImage.src = npcOnCell.npc.imageSrc;
+                npcImage.classList.add('Gif_Img');
+                cell.appendChild(npcImage);
+            }
+
+            row.appendChild(cell);
         }
         table.appendChild(row);
     }
@@ -299,18 +363,26 @@ function updateTable() {
         }
     }
 
-    atualizarVida(); 
+    atualizarVida();
 }
+
 
 function isBarrier(x, y) {
     return barriers.some(coordenada => coordenada.x === x && coordenada.y === y);
 }
 
 
+
 function movePlayer(event) {
     if (isPlayerInCombat) {
         showAlert("Você está em combate! Gire o dado para atacar.");
         return;
+    }
+
+    const transitionBlock = transitionBlocks.find(block => block.x === playerX && block.y === playerY);
+    if (transitionBlock) {
+        loadMap(transitionBlock.newMap);
+        return; 
     }
 
     let newPlayerX = playerX;
@@ -357,11 +429,20 @@ function movePlayer(event) {
         updateTable();
     }
 
-    // Atualizar visibilidade do mapa e vida do jogador
+    // Verificar interação com NPCs
+    interagirComNpc();
+
+    // Verificar se o jogador está em um bloco de transição
+    const transitionBlock = transitionBlocks.find(block => block.x === playerX && block.y === playerY);
+    if (transitionBlock) {
+        loadMap(transitionBlock.newMap);
+    }
+
     atualizarVisibilidadeMapa();
     atualizarVida();
+    interagirComNpc();
+    verificarMapa();;
 }
-
 
 
 function atualizarResultadoDado(resultado) {
@@ -408,7 +489,7 @@ addItemToMap("Poção", "imgs/abacate.png", 9, 7);
 addItemToMap("Poção", "imgs/abacate.png", 16, 15);
 addItemToMap("Poção", "imgs/abacate.png", 9, 5);
 addItemToMap("Espada", "imgs/SPADA.png", 6, 3);
-addItemToMap("Mapa", "imgs/mapa.png", 3, 7);
+
 addItemToMap("Mapa", "imgs/mapa.png", 10, 15);
 addMonstroToMap("alien", "imgs/boss.png", 8, 900, 2, 16);
 addMonstroToMap("Monstro do Lago", "imgs/agua.png", 70, 850, 2, 8);
