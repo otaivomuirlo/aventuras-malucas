@@ -1,3 +1,13 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const nextButton = document.getElementById("next-button");
+    if (!nextButton) return;
+
+    nextButton.addEventListener("click", function () {
+        showNextParagraph();
+    });
+    atualizarVisibilidadeMapa();
+});
+
 function showNextParagraph() {
     const storyParagraphs = [
         "Seu único item é uma pequena adaga enferrujada...",
@@ -302,6 +312,7 @@ function movePlayer(event) {
         showAlert("Você está em combate! Gire o dado para atacar.");
         return;
     }
+
     let newPlayerX = playerX;
     let newPlayerY = playerY;
     const moveDistance = 0.5;
@@ -329,29 +340,28 @@ function movePlayer(event) {
             break;
     }
 
-    const mapaIndex = itemsOnMap.findIndex(item => item.x === newPlayerX && item.y === newPlayerY && item.item.name === "Mapa");
-    if (mapaIndex !== -1) {
-        itemsOnMap.splice(mapaIndex, 1);
-        showAlert("Você pegou o mapa! A área ao redor foi revelada.");
-        revelarArea(newPlayerX, newPlayerY, 4); 
-    }
-
+    // Verificar interação com itens
     const itemIndex = itemsOnMap.findIndex(item => item.x === newPlayerX && item.y === newPlayerY);
     if (itemIndex !== -1) {
         const pickedItem = itemsOnMap.splice(itemIndex, 1)[0];
         addToInventory(pickedItem.item);
     }
 
+    // Verificar interação com monstros
+    iniciarCombate();
+
+    // Atualizar a posição do jogador e a tabela
     if (newPlayerX >= 0 && newPlayerX < numRows && newPlayerY >= 0 && newPlayerY < numCols) {
         playerX = newPlayerX;
         playerY = newPlayerY;
         updateTable();
     }
 
+    // Atualizar visibilidade do mapa e vida do jogador
     atualizarVisibilidadeMapa();
     atualizarVida();
-    iniciarCombate();
 }
+
 
 
 function atualizarResultadoDado(resultado) {
@@ -438,36 +448,35 @@ var botao = document.getElementById('botaoLimpar');
 botao.onclick = limparDiv;
 
 function atualizarVisibilidadeMapa() {
-    const alcanceVisual = 1; 
+    let alcanceVisual = 1;
+    if (hasItemInInventory("Mapa")) {
+        alcanceVisual = 10; // Aumenta o alcance visual se o jogador tiver o mapa no inventário
+    }
+
     for (let i = 0; i < numRows; i++) {
         for (let j = 0; j < numCols; j++) {
             const cell = document.getElementById(`cell${i}${j}`);
             const distancia = Math.abs(playerX - i) + Math.abs(playerY - j);
-    
+
             if (distancia > alcanceVisual) {
-                cell.style.visibility = "hidden"; 
-    
-                // Adiciona a névoa à célula
+                cell.style.visibility = "hidden";
+
                 const fogElement = document.createElement('div');
                 fogElement.classList.add('fog');
-                cell.prepend(fogElement); 
+                cell.prepend(fogElement);
             } else {
                 cell.style.visibility = "visible";
-                
-                // Remove a névoa da célula se estiver dentro do alcance visual
+
                 const fogElement = cell.querySelector('.fog');
                 if (fogElement) {
                     cell.removeChild(fogElement);
                 }
-    
-                // Verifica se o jogador está na célula atual e o exibe
                 if (playerX === i && playerY === j) {
-                    // Define a visibilidade do jogador como "visível"
                     cell.style.visibility = "visible";
                 }
             }
         }
-    }    
+    }
 }
 
 
@@ -492,9 +501,10 @@ function verificarMapa() {
     const itemMapaEncontrado = itemsOnMap.findIndex(item => item.item.name === "Mapa" && item.x === playerX && item.y === playerY);
 
     if (itemMapaEncontrado !== -1) {
-        itemsOnMap.splice(itemMapaEncontrado, 1);
+        const mapa = itemsOnMap.splice(itemMapaEncontrado, 1)[0];
+        addToInventory(mapa.item);
         showAlert("Você pegou o mapa! A área ao redor foi revelada.");
-        revelarArea(playerX, playerY, 10); 
+        atualizarVisibilidadeMapa(); // Atualize a visibilidade do mapa após pegar o mapa
     }
 }
 
