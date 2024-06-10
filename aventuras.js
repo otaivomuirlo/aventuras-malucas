@@ -379,11 +379,6 @@ function movePlayer(event) {
         return;
     }
 
-    const transitionBlock = transitionBlocks.find(block => block.x === playerX && block.y === playerY);
-    if (transitionBlock) {
-        loadMap(transitionBlock.newMap);
-        return; 
-    }
 
     let newPlayerX = playerX;
     let newPlayerY = playerY;
