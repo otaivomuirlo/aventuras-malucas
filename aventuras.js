@@ -1,3 +1,18 @@
+
+
+
+let transitionBlocks = [];
+let playerDano = 0;
+let playerX = 9;
+let playerY = 11;
+let life = 100;
+let inventory = [];
+let itemsOnMap = [];
+let monstrosOnMap = [];
+let isPlayerInCombat = false;
+const barriers = [];
+
+
 class Npc {
     constructor(name, message, imageSrc) {
         this.name = name;
@@ -7,11 +22,12 @@ class Npc {
 }
 
 function interagirComNpc() {
-    const npcProximo = npcsOnMap.find(npc => Math.abs(npc.x - playerX) <= 0.5 && Math.abs(npc.y - playerY) <= 0.5);
-    if (npcProximo) {
-        showAlert(npcProximo.message);
+    if(npc => npc.x === playerX && npc.y === playerY);
+    if (npc) {
+        showAlert(`Você encontrou ${npc.name}: ${npc.dialogue}`);
     }
 }
+
 
 let npcsOnMap = [];
 
@@ -33,33 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
     atualizarVisibilidadeMapa();
 });
 
-const transitionBlocks = [
-    { x: 17, y: 8, newMap: "mapa2" },
-    { x: 17, y: 9, newMap: "mapa2" },
-    { x: 17, y: 10, newMap: "mapa2" },
-];
 
-
-function loadMap(mapName) {
-    if (mapName === "mapa2") {
-
-        numRows = 20;  
-        numCols = 20;  
-        playerX = 1;
-        playerY = 1;
-
-        monstrosOnMap = [];
-        npcsOnMap = [];
-        itemsOnMap = [];
-
-
-        addNpcToMap("Guarda", "!!!tem um monstro muito forte a frente pegue a armadura e tenha cuidado!!!", "imgs/guarda.png", 2, 2);
-
-    }
-
-    updateTable();
-    atualizarVisibilidadeMapa();
-    atualizarVida();
+function addTransitionBlock(x, y, newPageLink) {
+    transitionBlocks.push({ x, y, newPageLink });
 }
 
 
@@ -144,18 +136,6 @@ class Mapa {
         this.imagemSrc = "imgs/mapa.png"; // Substitua pelo caminho da imagem do mapa
     }
 }
-
-let playerDano = 0;
-let playerX = 9;
-let playerY = 11;
-let life = 100;
-let inventory = [];
-let itemsOnMap = [];
-let monstrosOnMap = [];
-let isPlayerInCombat = false;
-const barriers = [];
-
-
 function removeFromInventory(itemName, arr) {
     const index = arr.findIndex(item => item.name === itemName);
     if (index !== -1) {
@@ -167,34 +147,28 @@ function hasItemInInventory(itemName) {
     return inventory.some(item => item.name === itemName);
 }
 
-function verificarEspada() {
-    const espadaIndex = inventory.findIndex(item => item.name === "Espada");
-    if (espadaIndex !== -1) {
-        playerDano += 60;
-        showAlert("Você pegou a espada e adquiriu +60 de dano!");
-    }
-}
-
 function addToInventory(item) {
     inventory.push(item);
     updateInventory();
+
     const inventoryList = document.getElementById("items");
     const itemElement = document.createElement("li");
     itemElement.textContent = item.name;
     inventoryList.appendChild(itemElement);
-}
 
-function criarParedeVertical(inicioX, inicioY, finalX) {
-    for (let x = inicioX; x <= finalX; x++) {
-        barriers.push({ x, y: inicioY });
+    if (item.name === "Espada") {
+        verificarEspada();
     }
 }
 
-function criarParedeHorizontal(inicioX, inicioY, finalY) {
-    for (let y = inicioY; y <= finalY; y++) {
-        barriers.push({ x: inicioX, y });
+function verificarEspada() {
+    if (inventory.find(item => item.name === "Espada")) {
+        playerDano = 60;
+        showAlert("Você pegou a espada e adquiriu +60 de dano!");
     }
 }
+
+
 
 
 function realizarAtaqueMonstro() {
@@ -356,7 +330,7 @@ function updateTable() {
         const playerCell = document.getElementById(`cell${playerX}${playerY}`);
         if (playerCell) {
             const playerImage = document.createElement('img');
-            playerImage.src = "imgs/pixil-frame-0.png";
+            playerImage.src = "../imgs/protagonista.png";
             playerImage.width = 35;
             playerImage.height = 40;
             playerCell.appendChild(playerImage);
@@ -379,32 +353,38 @@ function movePlayer(event) {
         return;
     }
 
-
     let newPlayerX = playerX;
     let newPlayerY = playerY;
     const moveDistance = 0.5;
 
     switch (event.key) {
         case "ArrowUp":
-            if (newPlayerX > 0 && !isBarrier(newPlayerX - moveDistance, playerY)) {
+            if (newPlayerX - moveDistance >= 0 && !isBarrier(newPlayerX - moveDistance, playerY)) {
                 newPlayerX -= moveDistance;
             }
             break;
         case "ArrowDown":
-            if (newPlayerX < numRows - 1 && !isBarrier(newPlayerX + moveDistance, playerY)) { 
+            if (newPlayerX + moveDistance < numRows && !isBarrier(newPlayerX + moveDistance, playerY)) {
                 newPlayerX += moveDistance;
             }
             break;
         case "ArrowLeft":
-            if (newPlayerY > 0 && !isBarrier(newPlayerX, newPlayerY - moveDistance)) {
+            if (newPlayerY - moveDistance >= 0 && !isBarrier(newPlayerX, newPlayerY - moveDistance)) {
                 newPlayerY -= moveDistance;
             }
             break;
         case "ArrowRight":
-            if (newPlayerY < numCols - 1 && !isBarrier(newPlayerX, newPlayerY + moveDistance)) { 
+            if (newPlayerY + moveDistance < numCols && !isBarrier(newPlayerX, newPlayerY + moveDistance)) {
                 newPlayerY += moveDistance;
             }
             break;
+    }
+
+    // Verificar se o jogador passou sobre um bloco de transição
+    const transitionBlock = transitionBlocks.find(block => block.x === newPlayerX && block.y === newPlayerY);
+    if (transitionBlock) {
+        window.location.href = transitionBlock.newPageLink;
+        return;
     }
 
     // Verificar interação com itens
@@ -414,9 +394,6 @@ function movePlayer(event) {
         addToInventory(pickedItem.item);
     }
 
-    // Verificar interação com monstros
-    iniciarCombate();
-
     // Atualizar a posição do jogador e a tabela
     if (newPlayerX >= 0 && newPlayerX < numRows && newPlayerY >= 0 && newPlayerY < numCols) {
         playerX = newPlayerX;
@@ -424,20 +401,16 @@ function movePlayer(event) {
         updateTable();
     }
 
-    // Verificar interação com NPCs
-    interagirComNpc();
 
-    // Verificar se o jogador está em um bloco de transição
-    const transitionBlock = transitionBlocks.find(block => block.x === playerX && block.y === playerY);
-    if (transitionBlock) {
-        loadMap(transitionBlock.newMap);
-    }
-
+    // Atualizar visibilidade do mapa e vida do jogador
     atualizarVisibilidadeMapa();
     atualizarVida();
-    interagirComNpc();
-    verificarMapa();;
+    verificarMapa();
 }
+
+
+
+
 
 
 function atualizarResultadoDado(resultado) {
@@ -480,17 +453,6 @@ document.getElementById("botao-curar").addEventListener("click", function () {
     }
 });
 
-addItemToMap("Poção", "imgs/abacate.png", 9, 7);
-addItemToMap("Poção", "imgs/abacate.png", 16, 15);
-addItemToMap("Poção", "imgs/abacate.png", 9, 5);
-addItemToMap("Espada", "imgs/SPADA.png", 6, 3);
-
-addItemToMap("Mapa", "imgs/mapa.png", 10, 15);
-addMonstroToMap("alien", "imgs/boss.png", 8, 900, 2, 16);
-addMonstroToMap("Monstro do Lago", "imgs/agua.png", 70, 850, 2, 8);
-addMonstroToMap("arvore", "imgs/dinosario.png", 5, 900, 4, 10);
-addMonstroToMap("arvore", "imgs/dinosario.png", 5, 900, 8, 17);
-addMonstroToMap("caveira", "imgs/cavera.png", 5, 1000, 17, 19);
 
 document.addEventListener("keydown", function(event) {
     movePlayer(event);
@@ -534,27 +496,28 @@ function atualizarVisibilidadeMapa() {
             const cell = document.getElementById(`cell${i}${j}`);
             const distancia = Math.abs(playerX - i) + Math.abs(playerY - j);
 
-            if (distancia > alcanceVisual) {
-                cell.style.visibility = "hidden";
+            if (cell) { // Verifica se o elemento cell existe antes de acessar suas propriedades
+                if (distancia > alcanceVisual) {
+                    cell.style.visibility = "hidden";
 
-                const fogElement = document.createElement('div');
-                fogElement.classList.add('fog');
-                cell.prepend(fogElement);
-            } else {
-                cell.style.visibility = "visible";
-
-                const fogElement = cell.querySelector('.fog');
-                if (fogElement) {
-                    cell.removeChild(fogElement);
-                }
-                if (playerX === i && playerY === j) {
+                    const fogElement = document.createElement('div');
+                    fogElement.classList.add('fog');
+                    cell.prepend(fogElement);
+                } else {
                     cell.style.visibility = "visible";
+
+                    const fogElement = cell.querySelector('.fog');
+                    if (fogElement) {
+                        fogElement.style.display = "none";
+                    }
+                    if (playerX === i && playerY === j) {
+                        cell.style.visibility = "visible";
+                    }
                 }
             }
         }
     }
 }
-
 
 
 function revelarArea(centerX, centerY, alcance) {
