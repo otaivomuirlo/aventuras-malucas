@@ -1,6 +1,3 @@
-
-
-
 let transitionBlocks = [];
 let playerDano = 0;
 let playerX = 9;
@@ -97,21 +94,7 @@ setTimeout(typeWriter, 1000);
 window.onload = function () {
     typeWriter();
 };
-document.getElementById("play-button").addEventListener("click", function() {
-    document.getElementById("main-menu").style.display = "none";
-});
 
-document.getElementById("about-button").addEventListener("click", function() {
-    document.getElementById("about-container").style.display = "block";
-});
-
-document.getElementById("close-about-button").addEventListener("click", function() {
-    document.getElementById("about-container").style.display = "none";
-});
-
-document.getElementById("exit-button").addEventListener("click", function() {
-    window.location.href = "https://www.google.com";
-});
 
 document.addEventListener("DOMContentLoaded", function () {
     const nextButton = document.getElementById("next-button");
@@ -147,6 +130,14 @@ function hasItemInInventory(itemName) {
     return inventory.some(item => item.name === itemName);
 }
 
+function verificarEspada() {
+    if (inventory.find(item => item.name === "Espada")) {
+        playerDano = 60; 
+        showAlert("Você pegou a espada e adquiriu +60 de dano!");
+    }
+}
+
+
 function addToInventory(item) {
     inventory.push(item);
     updateInventory();
@@ -160,14 +151,6 @@ function addToInventory(item) {
         verificarEspada();
     }
 }
-
-function verificarEspada() {
-    if (inventory.find(item => item.name === "Espada")) {
-        playerDano = 60;
-        showAlert("Você pegou a espada e adquiriu +60 de dano!");
-    }
-}
-
 
 
 
@@ -195,6 +178,7 @@ function realizarAtaqueMonstro() {
         }
     }
 }
+
 
 
 function addItemToMap(name, imageSrc, x, y) {
@@ -242,7 +226,7 @@ function realizarAtaque() {
     }
 
     const resultadoDado = girarDado(20);
-    const danoCausado = resultadoDado * (playerDano + 10); // 10 de dano base
+    const danoCausado = resultadoDado * playerDano;
     const monstroIndex = monstrosOnMap.findIndex(monstroObj =>
         Math.abs(monstroObj.x - playerX) <= 1 && Math.abs(monstroObj.y - playerY) <= 1
     );
@@ -257,8 +241,7 @@ function realizarAtaque() {
             terminarCombate();
         } else {
             showAlert(`Você causou ${danoCausado} de dano ao ${monstro.name}.`);
-            showAlert(`Vida restante: ${monstro.vida}`);
-            atualizarVida();
+            showAlert(`Vida restante do monstro: ${monstro.vida}`);
         }
     }
 }
@@ -340,12 +323,9 @@ function updateTable() {
     atualizarVida();
 }
 
-
 function isBarrier(x, y) {
     return barriers.some(coordenada => coordenada.x === x && coordenada.y === y);
 }
-
-
 
 function movePlayer(event) {
     if (isPlayerInCombat) {
@@ -488,7 +468,7 @@ botao.onclick = limparDiv;
 function atualizarVisibilidadeMapa() {
     let alcanceVisual = 1;
     if (hasItemInInventory("Mapa")) {
-        alcanceVisual = 10; // Aumenta o alcance visual se o jogador tiver o mapa no inventário
+        alcanceVisual = 2.5; // Aumenta o alcance visual se o jogador tiver o mapa no inventário
     }
 
     for (let i = 0; i < numRows; i++) {
@@ -518,8 +498,6 @@ function atualizarVisibilidadeMapa() {
         }
     }
 }
-
-
 function revelarArea(centerX, centerY, alcance) {
     for (let i = centerX - alcance; i <= centerX + alcance; i++) {
         for (let j = centerY - alcance; j <= centerY + alcance; j++) {

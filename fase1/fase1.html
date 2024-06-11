@@ -61,7 +61,7 @@
 </script>
 
 <script>
-        addItemToMap("Poção", "../imgs/abacate.png", 9, 7);
+    addItemToMap("Poção", "../imgs/abacate.png", 9, 7);
     addItemToMap("Poção", "../imgs/abacate.png", 16, 15);
     addItemToMap("Poção", "../imgs/abacate.png", 9, 5);
     addItemToMap("Espada", "../imgs/SPADA.png", 6, 3);
@@ -78,6 +78,22 @@
     addTransitionBlock(17, 8, "../fase2/fase2.html");
     addTransitionBlock(17, 9, "../fase2/fase2.html");
     addTransitionBlock(17, 10, "../fase2/fase2.html");})
+
+    document.getElementById("play-button").addEventListener("click", function() {
+        document.getElementById("main-menu").style.display = "none";
+    });
+    
+    document.getElementById("about-button").addEventListener("click", function() {
+        document.getElementById("about-container").style.display = "block";
+    });
+    
+    document.getElementById("close-about-button").addEventListener("click", function() {
+        document.getElementById("about-container").style.display = "none";
+    });
+    
+    document.getElementById("exit-button").addEventListener("click", function() {
+        window.location.href = "https://www.google.com";
+    });
 
 </script>
 </body>
