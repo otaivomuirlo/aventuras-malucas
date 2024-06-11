@@ -1,7 +1,5 @@
 let transitionBlocks = [];
 let playerDano = 0;
-let playerX = 9;
-let playerY = 11;
 let life = 100;
 let inventory = [];
 let itemsOnMap = [];
