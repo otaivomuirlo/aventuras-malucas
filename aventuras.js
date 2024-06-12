@@ -173,9 +173,6 @@ function realizarAtaqueMonstro() {
     }
 }
 
-
-
-
 function addItemToMap(name, imageSrc, x, y) {
     const item = new Item(name, imageSrc);
     itemsOnMap.push({ item, x, y });
@@ -341,21 +338,21 @@ function movePlayer(event) {
 
     let newPlayerX = playerX;
     let newPlayerY = playerY;
-    const moveDistance = 0.5;
+    const moveDistance = 1;
 
     switch (event.key) {
         case "ArrowUp":
-            if (newPlayerX - moveDistance >= 0 && !isBarrier(newPlayerX - moveDistance, playerY)) {
+            if (newPlayerX - moveDistance >= -1 && !isBarrier(newPlayerX - moveDistance, newPlayerY)) {
                 newPlayerX -= moveDistance;
             }
             break;
         case "ArrowDown":
-            if (newPlayerX + moveDistance < numRows && !isBarrier(newPlayerX + moveDistance, playerY)) {
+            if (newPlayerX + moveDistance < numRows && !isBarrier(newPlayerX + moveDistance, newPlayerY)) {
                 newPlayerX += moveDistance;
             }
             break;
         case "ArrowLeft":
-            if (newPlayerY - moveDistance >= 0 && !isBarrier(newPlayerX, newPlayerY - moveDistance)) {
+            if (newPlayerY - moveDistance >= -1 && !isBarrier(newPlayerX, newPlayerY - moveDistance)) {
                 newPlayerY -= moveDistance;
             }
             break;
@@ -388,10 +385,6 @@ function movePlayer(event) {
     atualizarVida();
     iniciarCombate(); 
 }
-
-
-
-
 
 
 
@@ -527,9 +520,7 @@ function verificarMapa() {
     }
 }
 
-
 document.addEventListener("keydown", function(event) {
     movePlayer(event);
     verificarMapa();
 });
-
