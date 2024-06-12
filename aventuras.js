@@ -1,3 +1,6 @@
+
+
+
 let transitionBlocks = [];
 let playerDano = 0;
 let life = 100;
@@ -6,9 +9,6 @@ let itemsOnMap = [];
 let monstrosOnMap = [];
 let isPlayerInCombat = false;
 const barriers = [];
-
-
-
 
 class Npc {
     constructor(name, message, imageSrc) {
@@ -56,6 +56,7 @@ function showNextParagraph() {
     const storyParagraphs = [
         "Seu único item é uma pequena adaga enferrujada...",
         "Sua melhor esperança agora é explorar essa floresta desconhecida",
+        "Dica do Jogo: Antes de enfrentar inimigos procure por pocoes e espadas",
     ];
 
     const storyParagraph = document.getElementById("story-paragraph");
@@ -126,8 +127,8 @@ function hasItemInInventory(itemName) {
 
 function verificarEspada() {
     if (inventory.find(item => item.name === "Espada")) {
-        playerDano = 60; 
-        showAlert("Você pegou a espada e adquiriu +60 de dano!");
+        playerDano = 50; 
+        showAlert("Você pegou a espada e adquiriu +50 de dano!");
     }
 }
 
@@ -221,6 +222,8 @@ function terminarCombate() {
     document.getElementById("combate-container").style.display = "none";
 }
 
+
+
 function realizarAtaque() {
     if (!isPlayerInCombat) {
         showAlert("Você não está em combate!");
@@ -234,19 +237,27 @@ function realizarAtaque() {
     );
 
     if (monstroIndex !== -1) {
-        const monstro = monstrosOnMap[monstroIndex].monstro;
+        const { monstro } = monstrosOnMap[monstroIndex];
         monstro.vida -= danoCausado;
 
         if (monstro.vida <= 0) {
-            showAlert("Você derrotou o monstro!");
+            showAlert(`Você derrotou o monstro ${monstro.name}!`);
             monstrosOnMap.splice(monstroIndex, 1);
             terminarCombate();
+
+            monstrosDerrotados++;
+            document.getElementById('monstros-derrotados').textContent = monstrosDerrotados;
+
+            if (monstrosDerrotados === 5) {
+                window.location.href = "fase2.html";
+            }
         } else {
             showAlert(`Você causou ${danoCausado} de dano ao ${monstro.name}.`);
             showAlert(`Vida restante do monstro: ${monstro.vida}`);
         }
     }
 }
+
 
 
 function girarDado(lados) {
@@ -462,9 +473,9 @@ var botao = document.getElementById('botaoLimpar');
 botao.onclick = limparDiv;
 
 function atualizarVisibilidadeMapa() {
-    let alcanceVisual = 1;
+    let alcanceVisual = 2;
     if (hasItemInInventory("Mapa")) {
-        alcanceVisual = 2.5;
+        alcanceVisual = 4.5;
     }
 
     for (let i = 0; i < numRows; i++) {

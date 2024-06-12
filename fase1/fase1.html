@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aventuras Incríveis</title>
     <link rel="stylesheet" href="fase1.css">
-    <audio id="background-music" src="path/to/your/music/file.mp3" loop></audio>
+    <audio id="background-music" src="../Bossa Nova Music Pack - Bell Kalengar.mp3" loop></audio>
 
 </head>
 <body>
@@ -41,6 +41,10 @@
     <ul id="items"></ul>
 </div>
 
+<div id="monster-count" style="font-size: 24px;">
+    Monstros Derrotados: <span id="monstros-derrotados">0</span>
+</div>
+
 <div id="combate-box">
     <p>Modo de Combate</p>
     <p id="resultado-dado">Resultado do Dado: 0</p>
@@ -68,6 +72,8 @@
     let playerY = 11;
     addItemToMap("Poção", "../imgs/abacate.png", 9, 7);
     addItemToMap("Poção", "../imgs/abacate.png", 16, 15);
+    addItemToMap("Poção", "../imgs/abacate.png", 14, 8);
+    addItemToMap("Poção", "../imgs/abacate.png", 7, 13);
     addItemToMap("Poção", "../imgs/abacate.png", 9, 5);
     addItemToMap("Espada", "../imgs/SPADA.png", 6, 3);
     addItemToMap("Mapa", "../imgs/mapa.png", 10, 15);

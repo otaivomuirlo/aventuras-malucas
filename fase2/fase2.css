@@ -139,17 +139,7 @@ td {
     margin-top: 5px; 
 }
 
-.fog {
-    position: absolute;
-    background-image: url("../imgs/fog.jpg");
-    background-size: cover;
-    visibility: visible;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0; 
 
-}
 
 
 #botaoLimpar{
