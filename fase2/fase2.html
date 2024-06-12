@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="fase2.css">
 </head>
 <body>
+    <audio id="background-music" src="../Bossa Nova Music Pack - Bell Kalengar.mp3" loop></audio>
 <div id="background-image"></div>
 <div id="botao-cura">
     <button id="botao-curar">!!CURAR!!</button>
@@ -56,8 +57,28 @@
 <script>
     let playerX = 15;
     let playerY = 17;
+    backgroundMusic.preload = 'auto';
+    backgroundMusic.load();
 
     addMonstroToMap("boss", "../imgs/boss.png", 8, 900, 13, 14);
+    // JavaScript para controlar a música e o jogo
+    const backgroundMusic = document.getElementById('background-music');
+
+function startGame() {
+    // Tocar a música de fundo quando o jogo começar
+    backgroundMusic.play();
+}
+
+function stopGame() {
+    // Parar a música de fundo quando o jogo terminar
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0; // Reinicia a música
+}
+
+// Adicionar evento de clique ao botão para iniciar o jogo
+document.getElementById('start-game-button').addEventListener('click', function() {
+    startGame();
+});
 </script>
 </body>
 </html>
