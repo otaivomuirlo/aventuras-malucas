@@ -8,6 +8,8 @@ let isPlayerInCombat = false;
 const barriers = [];
 
 
+
+
 class Npc {
     constructor(name, message, imageSrc) {
         this.name = name;
@@ -111,12 +113,6 @@ class Item {
     }
 }
 
-class Mapa {
-    constructor() {
-        this.nome = "Mapa";
-        this.imagemSrc = "imgs/mapa.png"; // Substitua pelo caminho da imagem do mapa
-    }
-}
 function removeFromInventory(itemName, arr) {
     const index = arr.findIndex(item => item.name === itemName);
     if (index !== -1) {
@@ -179,17 +175,18 @@ function realizarAtaqueMonstro() {
 
 
 
+
 function addItemToMap(name, imageSrc, x, y) {
     const item = new Item(name, imageSrc);
     itemsOnMap.push({ item, x, y });
     updateTable();
 }
 
-function addMonstroToMap(name, imageSrc, dano, vida, x, y) {
-    const monstro = { name, imageSrc, dano, vida };
+function addMonstroToMap(x, y, monstro) {
     monstrosOnMap.push({ monstro, x, y });
     updateTable();
 }
+
 
 function iniciarCombate() {
     if (isPlayerInCombat) {
@@ -199,16 +196,26 @@ function iniciarCombate() {
     }
 
     const monstroProximo = monstrosOnMap.find(monstroObj =>
-        Math.abs(monstroObj.x - playerX) <= 0.5 && Math.abs(monstroObj.y - playerY) <= 0.5
+        Math.abs(monstroObj.x - playerX) <= 1 && Math.abs(monstroObj.y - playerY) <= 1
     );
 
+    console.log("Verificando proximidade dos monstros...");
+    monstrosOnMap.forEach(monstroObj => {
+        console.log(`Monstro ${monstroObj.monstro.name} está em (${monstroObj.x}, ${monstroObj.y})`);
+    });
+    console.log(`Posição do jogador: (${playerX}, ${playerY})`);
+
     if (monstroProximo) {
+        console.log(`Monstro próximo encontrado: ${monstroProximo.monstro.name}`);
         isPlayerInCombat = true;
         showAlert("Você entrou em modo de combate!");
         document.getElementById("botao-girar-dado").disabled = false;
         document.getElementById("combate-container").style.display = "block";
+    } else {
+        console.log("Nenhum monstro próximo encontrado.");
     }
 }
+
 
 function terminarCombate() {
     isPlayerInCombat = false;
@@ -243,6 +250,7 @@ function realizarAtaque() {
         }
     }
 }
+
 
 function girarDado(lados) {
     return Math.floor(Math.random() * lados) + 1;
@@ -358,33 +366,29 @@ function movePlayer(event) {
             break;
     }
 
-    // Verificar se o jogador passou sobre um bloco de transição
     const transitionBlock = transitionBlocks.find(block => block.x === newPlayerX && block.y === newPlayerY);
     if (transitionBlock) {
         window.location.href = transitionBlock.newPageLink;
         return;
     }
 
-    // Verificar interação com itens
     const itemIndex = itemsOnMap.findIndex(item => item.x === newPlayerX && item.y === newPlayerY);
     if (itemIndex !== -1) {
         const pickedItem = itemsOnMap.splice(itemIndex, 1)[0];
         addToInventory(pickedItem.item);
     }
 
-    // Atualizar a posição do jogador e a tabela
     if (newPlayerX >= 0 && newPlayerX < numRows && newPlayerY >= 0 && newPlayerY < numCols) {
         playerX = newPlayerX;
         playerY = newPlayerY;
         updateTable();
     }
 
-
-    // Atualizar visibilidade do mapa e vida do jogador
     atualizarVisibilidadeMapa();
     atualizarVida();
-    verificarMapa();
+    iniciarCombate(); 
 }
+
 
 
 
@@ -420,6 +424,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
 
 document.getElementById("botao-curar").addEventListener("click", function () {
     if (hasItemInInventory("Poção")) {
@@ -466,7 +471,7 @@ botao.onclick = limparDiv;
 function atualizarVisibilidadeMapa() {
     let alcanceVisual = 1;
     if (hasItemInInventory("Mapa")) {
-        alcanceVisual = 2.5; // Aumenta o alcance visual se o jogador tiver o mapa no inventário
+        alcanceVisual = 2.5;
     }
 
     for (let i = 0; i < numRows; i++) {
@@ -474,16 +479,14 @@ function atualizarVisibilidadeMapa() {
             const cell = document.getElementById(`cell${i}${j}`);
             const distancia = Math.abs(playerX - i) + Math.abs(playerY - j);
 
-            if (cell) { // Verifica se o elemento cell existe antes de acessar suas propriedades
+            if (cell) {
                 if (distancia > alcanceVisual) {
                     cell.style.visibility = "hidden";
-
                     const fogElement = document.createElement('div');
                     fogElement.classList.add('fog');
                     cell.prepend(fogElement);
                 } else {
                     cell.style.visibility = "visible";
-
                     const fogElement = cell.querySelector('.fog');
                     if (fogElement) {
                         fogElement.style.display = "none";
@@ -496,6 +499,7 @@ function atualizarVisibilidadeMapa() {
         }
     }
 }
+
 function revelarArea(centerX, centerY, alcance) {
     for (let i = centerX - alcance; i <= centerX + alcance; i++) {
         for (let j = centerY - alcance; j <= centerY + alcance; j++) {
@@ -519,11 +523,13 @@ function verificarMapa() {
         const mapa = itemsOnMap.splice(itemMapaEncontrado, 1)[0];
         addToInventory(mapa.item);
         showAlert("Você pegou o mapa! A área ao redor foi revelada.");
-        atualizarVisibilidadeMapa(); // Atualize a visibilidade do mapa após pegar o mapa
+        atualizarVisibilidadeMapa();
     }
 }
+
 
 document.addEventListener("keydown", function(event) {
     movePlayer(event);
     verificarMapa();
 });
+

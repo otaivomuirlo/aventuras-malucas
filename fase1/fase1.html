@@ -70,11 +70,11 @@
     addItemToMap("Espada", "../imgs/SPADA.png", 6, 3);
     addItemToMap("Mapa", "../imgs/mapa.png", 10, 15);
 
-    addMonstroToMap("alien", "../imgs/boss.png", 8, 900, 2, 16);
-    addMonstroToMap("Monstro do Lago", "../imgs/agua.png", 70, 850, 2, 8);
-    addMonstroToMap("arvore", "../imgs/dinosario.png", 5, 900, 4, 10);
-    addMonstroToMap("arvore", "../imgs/dinosario.png", 5, 900, 8, 17);
-    addMonstroToMap("caveira", "../imgs/cavera.png", 5, 1000, 17, 19);
+    addMonstroToMap(2, 16, { name: "alien", imageSrc: "../imgs/boss.png", dano: 8, vida: 900 });
+    addMonstroToMap(2, 8, { name: "Monstro do Lago", imageSrc: "../imgs/agua.png", dano: 70, vida: 850 });
+    addMonstroToMap(4, 10, { name: "arvore", imageSrc: "../imgs/dinosario.png", dano: 5, vida: 900 });
+    addMonstroToMap(8, 17, { name: "arvore", imageSrc: "../imgs/dinosario.png", dano: 5, vida: 900 });
+    addMonstroToMap(17, 19, { name: "caveira", imageSrc: "../imgs/cavera.png", dano: 5, vida: 1000 });
 
 
     document.addEventListener("DOMContentLoaded", function() {
