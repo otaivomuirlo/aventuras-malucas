@@ -160,6 +160,9 @@ function realizarAtaqueMonstro() {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
                 showAlert("Você morreu! Fim de jogo.");
                 showAlert("Reiniciando em 5 segundos");
+                const audioElement = document.getElementById('morteAudio');
+                audioElement.volume = 0.2; 
+                audioElement.play(); 
                 reiniciarPagina();
             } else {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
@@ -211,16 +214,13 @@ function iniciarCombate() {
 }
 let monstrosDerrotados = 0;
 function terminarCombate() {
-    if (monstrosDerrotados === 2) {
-        console.log("Você derrotou um monstro");
-        setTimeout(() => {
-            window.location.href = "../fase2/fase2.html";
-        }, 5000); 
-    }
     isPlayerInCombat = false;
     document.getElementById("botao-girar-dado").disabled = true;
-    showAlert("Você saiu do modo de combate.");
+    setTimeout(() => {
+        window.location.href = "../fase1/fase1.html";
+    }, 5000); 
     document.getElementById("combate-container").style.display = "none";
+
    
 }
 
@@ -242,11 +242,7 @@ function realizarAtaque() {
 
         if (monstro.vida <= 0) {
             showAlert(`Você derrotou o monstro ${monstro.name}!`);
-            monstrosOnMap.splice(monstroIndex, 1);
-            monstrosDerrotados++;
-            document.getElementById('monstros-derrotados').textContent = monstrosDerrotados.toString();
-
-            document.getElementById('result-alert').innerHTML = `Você derrotou o monstro ${monstro.name}!`;
+            showAlert(`Parabens, voce terminou o jogo!`);
             terminarCombate();
             
 

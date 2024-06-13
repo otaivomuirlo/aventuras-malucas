@@ -49,6 +49,10 @@
 
 <div id="monster-count" style="font-size: 24px;">
     Monstros Derrotados: <span id="monstros-derrotados">0</span>
+    
+</div>
+<div id="explicacao">
+    <p>Derrote 3 monstros para lutar contra o Chefão!</p>
 </div>
 
 <div id="combate-box">
@@ -76,7 +80,7 @@
 
 window.addEventListener('load', function() {
             var audio = document.getElementById('Musica');
-            audio.volume = 0.05;
+            audio.volume = 0.03;
             var playPromise = audio.play();
 
             if (playPromise !== undefined) {
@@ -84,7 +88,6 @@ window.addEventListener('load', function() {
                     console.log('Reprodução automática bem-sucedida.');
                 }).catch(function(error) {
                     console.log('Reprodução automática foi bloqueada:', error);
-                    // Tente novamente em uma interação do usuário
                     document.body.addEventListener('click', function() {
                         audio.play();
                     }, { once: true });
@@ -93,13 +96,13 @@ window.addEventListener('load', function() {
         });
 
 
-    let playerX = 9;
+    let playerX = 8;
     let playerY = 11;
-    addItemToMap("Poção", "../imgs/abacate.png", 9, 7);
+    addItemToMap("Poção", "../imgs/abacate.png", 8, 7);
     addItemToMap("Poção", "../imgs/abacate.png", 16, 15);
     addItemToMap("Poção", "../imgs/abacate.png", 14, 8);
     addItemToMap("Poção", "../imgs/abacate.png", 7, 13);
-    addItemToMap("Poção", "../imgs/abacate.png", 9, 5);
+    addItemToMap("Poção", "../imgs/abacate.png", 8, 5);
     addItemToMap("Espada", "../imgs/SPADA.png", 6, 3);
     addItemToMap("Mapa", "../imgs/mapa.png", 10, 15);
 

@@ -56,18 +56,14 @@
 <script src="aventuras2.js"></script>
 
 <script>
-
     let playerX = 17;
     let playerY = 24;
     addItemToMap("Poção", "../imgs/abacate.png", 9, 7);
-
     addItemToMap("Poção", "../imgs/abacate.png", 7, 13);
     addItemToMap("Poção", "../imgs/abacate.png", 9, 5);
 
 
     addMonstroToMap(5, 13, { name: "chefao", imageSrc: "../imgs/bossFinal.png", dano: 8, vida: 900 });
-
-
 
     document.getElementById("play-button").addEventListener("click", function() {
         document.getElementById("main-menu").style.display = "none";

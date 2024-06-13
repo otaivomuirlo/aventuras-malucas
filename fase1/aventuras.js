@@ -192,7 +192,7 @@ function iniciarCombate() {
 }
 let monstrosDerrotados = 0;
 function terminarCombate() {
-    if (monstrosDerrotados === 2) {
+    if (monstrosDerrotados === 3) {
         console.log("Você derrotou um monstro");
         setTimeout(() => {
             window.location.href = "../fase2/fase2.html";
@@ -454,7 +454,7 @@ botao.onclick = limparDiv;
 function atualizarVisibilidadeMapa() {
     let alcanceVisual = 2;
     if (hasItemInInventory("Mapa")) {
-        alcanceVisual = 4.5;
+        alcanceVisual = 5.5;
     }
 
     for (let i = 0; i < numRows; i++) {
