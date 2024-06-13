@@ -62,7 +62,7 @@
         <button id="next-button">Próximo</button>
     </div>
 </div>
-<script src="../aventuras.js">
+<script src="aventuras.js">
 
 </script>
 
@@ -83,11 +83,6 @@
     addMonstroToMap(8, 17, { name: "arvore", imageSrc: "../imgs/dinosario.png", dano: 5, vida: 700 });
     addMonstroToMap(17, 19, { name: "caveira", imageSrc: "../imgs/cavera.png", dano: 5, vida: 1000 });
 
-
-    document.addEventListener("DOMContentLoaded", function() {
-    addTransitionBlock(17, 8, "../fase2/fase2.html");
-    addTransitionBlock(17, 9, "../fase2/fase2.html");
-    addTransitionBlock(17, 10, "../fase2/fase2.html");})
 
     document.getElementById("play-button").addEventListener("click", function() {
         document.getElementById("main-menu").style.display = "none";

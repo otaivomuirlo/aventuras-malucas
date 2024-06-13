@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="fase2.css">
 </head>
 <body>
-    <audio id="background-music" src="../Bossa Nova Music Pack - Bell Kalengar.mp3" loop></audio>
 <div id="background-image"></div>
 <div id="botao-cura">
     <button id="botao-curar">!!CURAR!!</button>
@@ -16,9 +15,6 @@
     <span id="life">Vida: 100</span>
 </div>
 <table id="gametable" width="800" height="700px" border="0" cellpadding="0" cellspacing="0" align="center"></table>
-
-
-
 
 <div id="about-container">
     <h2>Sobre o Jogo</h2>
@@ -48,37 +44,42 @@
 
 <div id="story-container">
     <div id="story-box">
-        <p id="story-paragraph">Voce acorda sozinho em um lugar desconhecido.</p>
+        <p id="story-paragraph-2">Após derrotar os monstros, você é colocado contra o maior de todos.</p>
         <button id="next-button">Próximo</button>
     </div>
 </div>
-<script src="../aventuras.js"></script>
+<script src="aventuras2.js"></script>
 
 <script>
-    let playerX = 15;
-    let playerY = 17;
-    backgroundMusic.preload = 'auto';
-    backgroundMusic.load();
+    let playerX = 17;
+    let playerY = 24;
+    addItemToMap("Poção", "../imgs/abacate.png", 9, 7);
+    addItemToMap("Poção", "../imgs/abacate.png", 16, 15);
+    addItemToMap("Poção", "../imgs/abacate.png", 14, 8);
+    addItemToMap("Poção", "../imgs/abacate.png", 7, 13);
+    addItemToMap("Poção", "../imgs/abacate.png", 9, 5);
 
-    addMonstroToMap("boss", "../imgs/boss.png", 8, 900, 13, 14);
-    // JavaScript para controlar a música e o jogo
-    const backgroundMusic = document.getElementById('background-music');
 
-function startGame() {
-    // Tocar a música de fundo quando o jogo começar
-    backgroundMusic.play();
-}
+    addMonstroToMap(5, 13, { name: "chefao", imageSrc: "../imgs/bossFinal.png", dano: 8, vida: 900 });
 
-function stopGame() {
-    // Parar a música de fundo quando o jogo terminar
-    backgroundMusic.pause();
-    backgroundMusic.currentTime = 0; // Reinicia a música
-}
 
-// Adicionar evento de clique ao botão para iniciar o jogo
-document.getElementById('start-game-button').addEventListener('click', function() {
-    startGame();
-});
+
+    document.getElementById("play-button").addEventListener("click", function() {
+        document.getElementById("main-menu").style.display = "none";
+    });
+    
+    document.getElementById("about-button").addEventListener("click", function() {
+        document.getElementById("about-container").style.display = "block";
+    });
+    
+    document.getElementById("close-about-button").addEventListener("click", function() {
+        document.getElementById("about-container").style.display = "none";
+    });
+    
+    document.getElementById("exit-button").addEventListener("click", function() {
+        window.location.href = "https://www.google.com";
+    });
+
 </script>
 </body>
 </html>
