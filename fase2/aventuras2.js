@@ -161,7 +161,7 @@ function realizarAtaqueMonstro() {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
                 showAlert("Você morreu! Fim de jogo.");
                 showAlert("Reiniciando em 5 segundos");
-                reiniciarPagina();
+                window.location.href="../fase1/fase1.html";
             } else {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
                 showAlert(`Vida restante: ${life}`);

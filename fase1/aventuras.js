@@ -8,29 +8,6 @@ let monstrosOnMap = [];
 let isPlayerInCombat = false;
 const barriers = [];
 
-class Npc {
-    constructor(name, message, imageSrc) {
-        this.name = name;
-        this.message = message;
-        this.imageSrc = imageSrc;
-    }
-}
-
-function interagirComNpc() {
-    if(npc => npc.x === playerX && npc.y === playerY);
-    if (npc) {
-        showAlert(`Você encontrou ${npc.name}: ${npc.dialogue}`);
-    }
-}
-
-
-let npcsOnMap = [];
-
-function addNpcToMap(name, message, imageSrc, x, y) {
-    const npc = new Npc(name, message, imageSrc);
-    npcsOnMap.push({ npc, x, y });
-    updateTable();
-}
 
 
 
@@ -309,13 +286,6 @@ function updateTable() {
                 cell.appendChild(monstroImage);
             }
 
-            const npcOnCell = npcsOnMap.find(npcObj => npcObj.x === i && npcObj.y === j);
-            if (npcOnCell) {
-                const npcImage = document.createElement('img');
-                npcImage.src = npcOnCell.npc.imageSrc;
-                npcImage.classList.add('Gif_Img');
-                cell.appendChild(npcImage);
-            }
 
             row.appendChild(cell);
         }

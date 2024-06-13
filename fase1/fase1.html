@@ -8,6 +8,12 @@
 
 </head>
 <body>
+
+    <audio id="minhaMusica" controls autoplay>
+        <source src="../musicaRPF.mp3" type="audio/mpeg">
+        Seu navegador não suporta o elemento de áudio.
+    </audio>
+
 <div id="background-image"></div>
 <div id="botao-cura">
     <button id="botao-curar">!!CURAR!!</button>
@@ -63,10 +69,28 @@
     </div>
 </div>
 <script src="aventuras.js">
-
 </script>
 
 <script>
+
+window.addEventListener('load', function() {
+            var audio = document.getElementById('minhaMusica');
+            var playPromise = audio.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(function() {
+                    console.log('Reprodução automática bem-sucedida.');
+                }).catch(function(error) {
+                    console.log('Reprodução automática foi bloqueada:', error);
+                    // Tente novamente em uma interação do usuário
+                    document.body.addEventListener('click', function() {
+                        audio.play();
+                    }, { once: true });
+                });
+            }
+        });
+
+
     let playerX = 9;
     let playerY = 11;
     addItemToMap("Poção", "../imgs/abacate.png", 9, 7);
