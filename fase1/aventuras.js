@@ -8,9 +8,6 @@ let monstrosOnMap = [];
 let isPlayerInCombat = false;
 const barriers = [];
 
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const nextButton = document.getElementById("next-button");
     if (!nextButton) return;
@@ -241,9 +238,6 @@ function realizarAtaque() {
         }
     }
 }
-
-
-
 
 
 function girarDado(lados) {

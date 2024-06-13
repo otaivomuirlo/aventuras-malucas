@@ -163,7 +163,9 @@ function realizarAtaqueMonstro() {
                 const audioElement = document.getElementById('morteAudio');
                 audioElement.volume = 0.2; 
                 audioElement.play(); 
-                reiniciarPagina();
+                setTimeout(() => {
+                    window.location.href = "../fase1/fase1.html";
+                }, 3000); 
             } else {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
                 showAlert(`Vida restante: ${life}`);
@@ -253,9 +255,6 @@ function realizarAtaque() {
         }
     }
 }
-
-
-
 
 
 function girarDado(lados) {
