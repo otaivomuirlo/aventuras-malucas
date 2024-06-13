@@ -138,6 +138,9 @@ function realizarAtaqueMonstro() {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
                 showAlert("Você morreu! Fim de jogo.");
                 showAlert("Reiniciando em 5 segundos");
+                const audioElement = document.getElementById('morteAudio');
+                audioElement.volume = 0.2; 
+                audioElement.play(); 
                 reiniciarPagina();
             } else {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
@@ -219,6 +222,9 @@ function realizarAtaque() {
         monstro.vida -= danoCausado;
 
         if (monstro.vida <= 0) {
+            const audioElement = document.getElementById('morteAudioMonstro');
+            audioElement.volume = 0.2; 
+            audioElement.play(); 
             showAlert(`Você derrotou o monstro ${monstro.name}!`);
             monstrosOnMap.splice(monstroIndex, 1);
             monstrosDerrotados++;

@@ -1,6 +1,5 @@
-
 let transitionBlocks = [];
-let playerDano = 0;
+let playerDano = 50;
 let life = 100;
 let inventory = [];
 let itemsOnMap = [];
@@ -161,7 +160,7 @@ function realizarAtaqueMonstro() {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
                 showAlert("Você morreu! Fim de jogo.");
                 showAlert("Reiniciando em 5 segundos");
-                window.location.href="../fase1/fase1.html";
+                reiniciarPagina();
             } else {
                 showAlert(`O ${monstro.name} atacou você! Causou ${danoCausadoMonstro} de dano.`);
                 showAlert(`Vida restante: ${life}`);

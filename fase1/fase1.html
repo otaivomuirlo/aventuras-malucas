@@ -9,11 +9,12 @@
 </head>
 <body>
 
-    <audio id="minhaMusica" controls autoplay>
+    <audio id="Musica" controls autoplay>
         <source src="../musicaRPF.mp3" type="audio/mpeg">
         Seu navegador não suporta o elemento de áudio.
     </audio>
-
+    <audio id="morteAudio" src="../morteProtagonista.mp3" type="audio/mpeg"  volume="0.5"></audio>
+    <audio id="morteAudioMonstro" src="../morteMonstro.mp3" type="audio/mpeg"  volume="0.5"></audio>
 <div id="background-image"></div>
 <div id="botao-cura">
     <button id="botao-curar">!!CURAR!!</button>
@@ -74,7 +75,8 @@
 <script>
 
 window.addEventListener('load', function() {
-            var audio = document.getElementById('minhaMusica');
+            var audio = document.getElementById('Musica');
+            audio.volume = 0.05;
             var playPromise = audio.play();
 
             if (playPromise !== undefined) {
