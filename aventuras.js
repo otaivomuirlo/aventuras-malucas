@@ -1,6 +1,4 @@
 
-
-
 let transitionBlocks = [];
 let playerDano = 0;
 let life = 100;
@@ -223,6 +221,7 @@ function terminarCombate() {
 }
 
 
+let monstrosDerrotados = 0;
 
 function realizarAtaque() {
     if (!isPlayerInCombat) {
@@ -243,20 +242,23 @@ function realizarAtaque() {
         if (monstro.vida <= 0) {
             showAlert(`Você derrotou o monstro ${monstro.name}!`);
             monstrosOnMap.splice(monstroIndex, 1);
-            terminarCombate();
-
             monstrosDerrotados++;
-            document.getElementById('monstros-derrotados').textContent = monstrosDerrotados;
+            document.getElementById('monstros-derrotados').textContent = monstrosDerrotados.toString();
 
+            document.getElementById('result-alert').innerHTML = `Você derrotou o monstro ${monstro.name}!`;
+            terminarCombate();
             if (monstrosDerrotados === 5) {
                 window.location.href = "fase2.html";
             }
         } else {
             showAlert(`Você causou ${danoCausado} de dano ao ${monstro.name}.`);
             showAlert(`Vida restante do monstro: ${monstro.vida}`);
+            document.getElementById('result-alert').innerHTML = `Você causou ${danoCausado} de dano ao ${monstro.name}.<br>Vida restante do monstro: ${monstro.vida}`;
         }
     }
 }
+
+
 
 
 
